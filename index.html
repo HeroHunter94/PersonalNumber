@@ -1,0 +1,221 @@
+<!--Cálculo del Número Personal
+Sólo tendrás que hacer la Reducción del Día de Nacimiento a un Dígito: ( reduccionMaestro(numero) ),
+ excepto para los números 11 y 22 considerados números maestros.
+
+
+
+Por ejemplo, si naciste un 2 de febrero de 1977 (como Shakira), tu Número Personal es 2:
+
+Pero si naciste un 18 de diciembre de 1968 (como Alejandro Sanz),
+tu Número Personal es 9 (1 + 8).
+
+Para extraer el día de nacimiento de una fecha puedes utilizar el objeto Date() de JavaScript de la siguiente manera:
+
+    const FECHANAC = document.getElementById('fechaNac');
+    const fechaNacimiento = new Date(FECHANAC.value);
+    // La instrucción new Date() crea un objeto JS tipo fecha
+    // que convierte el texto en fecha    
+    // Para extraer el dia de nacimiento:
+    let diaNacimiento = fechaNacimiento.getDate();    
+  
+Enlace al Objeto Date en mdn.
+
+La función reduccionDigito() se encuentra en el documento Usos del while .
+He aquí una versión modificada que excluye la reducción de los números maestros.
+
+    function reduccionMaestro(numero) {
+      let numeroReducido = numero;
+      const maestros = [11, 22]
+      while (numeroReducido > 9 && !maestros.includes(numeroReducido)) { 
+          let suma = 0;
+          let digitos = numeroReducido.toString().split('');
+          //convierte los números a String y los incluye en un array
+          for (let i = 0; i < digitos.length; i++) {
+              suma += parseInt(digitos[i]);
+          }
+          numeroReducido = suma
+      }
+      return numeroReducido;
+  }
+  
+Luego deberás crear un array de objetos, para buscar el número resultante (como la imagen en carrusel) y 
+mostrar su información. La información a incluir en el array de objetos, la puedes sacar de esta página: 
+Numerología Cotidiana.-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Personal Number</title>
+    <link href="OIP.webp" type="icon" rel="shortcut icon" />
+    <style>
+        body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f4f9;
+  color: #333;
+  padding: 30px;
+  max-width: 600px;
+  margin: auto;
+}
+
+h1 {
+  color: #4b0082;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+label {
+  display: block;
+  margin-top: 20px;
+  font-weight: bold;
+}
+
+input[type="text"],
+input[type="date"],
+select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+button {
+  padding: 10px 20px;
+  margin-right: 10px;
+  background-color: #4b0082;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #6a0dad;
+}
+
+#output {
+  margin-top: 30px;
+  padding: 15px;
+  background-color: #e0d8f5;
+  border-left: 4px solid #4b0082;
+  border-radius: 6px;
+  font-size: 18px;
+}
+    </style>
+</head>
+
+<body>
+    <h1>Numerología</h1>
+    <label for="surname">Fullname</label>
+    <input id="surname" type="text" value="Paoli" required />
+    <input id="name" type="text" value="Gino" required /><br />
+    <label for="dBirth">Date of birth</label>
+    <input id="dBirth" type="date" required /><br />
+    <label for="question">What do you wish to calculate?</label>
+    <select id="scelta">
+        <option value="1" selection>0. Numero Personal</option>
+        <option value="2">0. good question</option>
+    </select>
+    <button type="button" onclick="calculate()">Calculate</button>
+    <button type="button" onclick="information()">Information</button>
+    <p id="output"></p>
+    <script src="arrayObj.js"></script>
+    <script>
+        const NAME = document.getElementById("name");
+        const SURNAME = document.getElementById("surname");
+        const BIRTH = document.getElementById("dBirth");
+        const SCELTA = document.getElementById("scelta");
+        let interval;
+        function clean(){
+            document.getElementById("output").innerHTML = "";
+        }
+        function calculate() {
+            let name = NAME.value;
+            let surname = SURNAME.value;
+            let birth = BIRTH.value;
+            let scelta = SCELTA.value;
+            const dateBirth = new Date(BIRTH.value);
+            if (name == "") {
+                document.getElementById("output").innerHTML = "Please add your name";
+                interval = setTimeout(clean, 600);
+                return;
+            } else if (surname == "") {
+                document.getElementById("output").innerHTML = "Please add your surname";
+                interval = setTimeout(clean, 600);
+                return;
+            } else if (birth == "") {
+                document.getElementById("output").innerHTML =
+                    "Please add your date of birth";
+                interval = setTimeout(clean, 600);
+                return;
+            }
+
+            clearTimeout(interval);
+
+            if (scelta == 1) {
+                let dayBirth = dateBirth.getDate();
+                console.log(dayBirth);
+                document.getElementById(
+                    "output"
+                ).innerHTML = `Hey ${name} ${surname} your Personal Number is:   ${reductionMaestro(dayBirth)}`;
+            }
+        }
+        function information() {
+            let name = NAME.value;
+            let surname = SURNAME.value;
+            let birth = BIRTH.value;
+            const dateBirth = new Date(BIRTH.value);
+            if (name == "") {
+                document.getElementById("output").innerHTML = "Please add your name";
+                interval = setTimeout(clean, 600);
+                return;
+            } else if (surname == "") {
+                document.getElementById("output").innerHTML = "Please add your surname";
+                interval = setTimeout(clean, 600);
+                return;
+            } else if (birth == "") {
+                document.getElementById("output").innerHTML = "Please add your date of birth";
+                interval = setTimeout(clean, 600);
+                return;
+            }
+            clearTimeout(interval);
+            let length = numerology.length;
+            let dayBirth = reductionMaestro(dateBirth.getDate());
+            let boolean = false;
+            let index;
+            for (let i = 0; i < length && !boolean; i++) {
+                if (dayBirth == numerology[i].number) {
+                    boolean = true;
+                    index = i;
+                }
+            }
+            document.getElementById(
+                "output"
+            ).innerHTML = `Hey ${name} ${surname} This is the description of your personal number:   ${numerology[index].description
+            }`;
+        }
+        function reductionMaestro(numero) {
+            let numberReducted = numero;
+            const maestros = [11, 22];
+            while (numberReducted > 9 && !maestros.includes(numberReducted)) {
+                let sum = 0;
+                let digits = numberReducted.toString().split("");
+                //convierte los números a String y los incluye en un array
+                for (let i = 0; i < digits.length; i++) {
+                    sum += parseInt(digits[i]);
+                }
+                numberReducted = sum;
+            }
+            return numberReducted;
+        }
+
+    </script>
+</body>
+
+</html>
